@@ -1,0 +1,77 @@
+Lines beginning with "S:" are server messages.
+Lines beginning with "C:" are client messages.
+
+S: <listening on port 8778>
+C: <connecting>
+If the client is from an allowed IP:
+S: R
+Or else:
+S: D
+S: <close connection>
+
+From now on, we assume that a connection is already built to the server
+
+C: L <uname> <pass>
+If the client is already logged in:
+S: L
+If uname or pass is missing:
+S: E
+If the specified user is not allowed to login:
+S: D
+If the specified uname/pass combination is bad:
+S: B
+If login successful:
+S: S
+
+C: Q
+S: S
+S: <close connection>
+
+C: U <uid>
+If client hasn't login yet:
+S: L
+If uid is not numeric:
+S: E
+If uid is used:
+S: U
+If uid is free:
+S:F
+
+C: N <uname>
+If client hasn't login yet:
+S: L
+If uname exists:
+S: U
+If uname doesn't exist:
+S: F
+
+C: A <uname>:<uid>:<teacher?>:<samba?>:<passwd>:<comment>
+If client hasn't login yet:
+S: L
+If uid, teacher?, samba?, passwd or comment is not specified
+S: E
+If uid is not numeric:
+S: E
+If uid or uname is used:
+S: E
+If teacher? not 0 nor 1, and samba? not 0 nor 1
+S: E
+If tempfile or scriptfile couldn't be created:
+S: F
+If user couldn't be created:
+S: F
+If user has been created:
+S: S
+
+C: D <uname>
+If client hasn't login yet:
+S: L
+If uname doesn't exist:
+S: E
+If scriptfile couldn't be created:
+S: F
+If user cannot be deleted:
+S: F
+If user is deleted:
+S: S
+
